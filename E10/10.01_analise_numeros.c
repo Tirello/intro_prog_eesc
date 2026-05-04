@@ -32,15 +32,15 @@ int encontrar_menor(int v[], int n) {
     return menor;
 }
 
-float calcular_media(int v[], int n) {
-    long soma = 0;
+double calcular_media(int v[], int n) {
+    long long soma = 0;
     for (int i = 0; i < n; i++) {
         soma += v[i];
     }
-    return (float)soma / n;
+    return (double)soma / n;
 }
 
-int contar_acima_media(int v[], int n, float media) {
+int contar_acima_media(int v[], int n, double media) {
     int count = 0;
     for (int i = 0; i < n; i++) {
         if (v[i] > media) count++;
@@ -61,7 +61,7 @@ int main() {
     int impares = contar_impares(v, n);
     int maior = encontrar_maior(v, n);
     int menor = encontrar_menor(v, n);
-    float media = calcular_media(v, n);
+    double media = calcular_media(v, n);
     int acima = contar_acima_media(v, n, media);
 
     printf("Pares: %d | Impares: %d\n", pares, impares);
