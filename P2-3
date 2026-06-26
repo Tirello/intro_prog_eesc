@@ -1,0 +1,88 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
+
+public class ConfrontoSelecoes {
+
+    static class Jogador {
+        String nome;
+        String selecao;
+        double habilidade;
+
+        public Jogador(String nome, String selecao, double habilidade) {
+            this.nome = nome;
+            this.selecao = selecao;
+            this.habilidade = habilidade;
+        }
+    }
+
+    public static void main(String[] args) {
+        // Garante que o separador decimal seja ponto (.) em vez de vírgula (,)
+        Locale.setDefault(Locale.US);
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+
+        Map<String, List<Jogador>> selecoes = new HashMap<>();
+
+        // Cadastro dos jogadores
+        for (int i = 0; i < n; i++) {
+            String nome = scanner.nextLine().trim().toUpperCase();
+            String selecaoNome = scanner.nextLine().trim().toUpperCase();
+            int ataque = scanner.nextInt();
+            int estamina = scanner.nextInt();
+            int defesa = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+
+            double habilidade = (ataque + estamina + defesa) / 3.0;
+            Jogador jogador = new Jogador(nome, selecaoNome, habilidade);
+
+            selecoes.putIfAbsent(selecaoNome, new ArrayList<>());
+            selecoes.get(selecaoNome).add(jogador);
+        }
+
+        int q = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+
+        // Processamento dos confrontos
+        for (int i = 0; i < q; i++) {
+            String selecao1 = scanner.nextLine().trim().toUpperCase();
+            String selecao2 = scanner.nextLine().trim().toUpperCase();
+
+            double forca1 = calcularForcaSelecao(selecoes, selecao1);
+            double forca2 = calcularForcaSelecao(selecoes, selecao2);
+
+            System.out.printf("SELECAO 1: %s FORCA 1: %.2f%n", selecao1, forca1);
+            System.out.printf("SELECAO 2: %s FORCA 2: %.2f%n", selecao2, forca2);
+
+            if (forca1 > forca2) {
+                System.out.println("VENCEDOR: " + selecao1);
+            } else if (forca2 > forca1) {
+                System.out.println("VENCEDOR: " + selecao2);
+            } else {
+                System.out.println("EMPATE");
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+
+    private static double calcularForcaSelecao(Map<String, List<Jogador>> selecoes, String nomeSelecao) {
+        List<Jogador> jogadores = selecoes.get(nomeSelecao);
+        if (jogadores == null || jogadores.isEmpty()) {
+            return 0.0;
+        }
+
+        double somaHabilidades = 0.0;
+        for (Jogador j : jogadores) {
+            somaHabilidades += j.habilidade;
+        }
+
+        return somaHabilidades / jogadores.size();
+    }
+}
